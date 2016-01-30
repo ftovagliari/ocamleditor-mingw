@@ -45,7 +45,7 @@ let _ =
   if exit_code <> 0 then failwith "Cannot find 'rc' command.";
   let exit_code = Sys.command "where cvtres 1>NUL" in
   if exit_code <> 0 then failwith "Cannot find 'cvtres' command.";
-  let rcname, rc = try List.assoc Sys.argv.(1) resources with Not_found -> (try List.assoc (unquote Sys.argv.(1)) resources with Not_found -> kprintf failwith "rc_compile.ml: resource name %s not found") in
+  let rcname, rc = try List.assoc Sys.argv.(1) resources with Not_found -> (try List.assoc (unquote Sys.argv.(1)) resources with Not_found -> kprintf failwith "rc_compile.ml: resource name %s not found" Sys.argv.(1)) in
   let outchan = open_out_bin rcname in
   output_string outchan rc;
   close_out_noerr outchan;
