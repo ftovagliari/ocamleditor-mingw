@@ -5,6 +5,12 @@
 *)
 
 #load "unix.cma"
+#load "str.cma"
+open Printf
+
+let unquote =
+  let re = Str.regexp "^\"\\(.*\\)\"$" in
+  fun x -> if Str.string_match re x 0 then Str.matched_group 1 x else x
 
 let get_command_output command =
   let ch = Unix.open_process_in command in
@@ -27,7 +33,7 @@ let _ = if not Sys.win32 || is_mingw then exit 0;;
 
 let resources = [
   "launcher", (".\\ocamleditorw.resource.rc", "\
-1 VERSIONINFO\n    FILEVERSION     1,13,3,0\n    PRODUCTVERSION  1,13,3,0\n    FILEOS          0x00000004L\n    FILETYPE        0x00000001L\n{\n    BLOCK \"StringFileInfo\"\n    {\n        BLOCK \"040904E4\"\n        {\n            VALUE \"CompanyName\", \"\\000\"\n            VALUE \"FileDescription\", \"OCamlEditor\\000\"\n            VALUE \"FileVersion\", \"1.13.3.0\\000\"\n            VALUE \"InternalName\", \"ocamleditorw.exe\\000\"\n            VALUE \"ProductName\", \"OCamlEditor\\000\"\n            VALUE \"LegalCopyright\", \"\\251 2016 Francesco Tovagliari\\000\"\n        }\n    }\n    BLOCK \"VarFileInfo\"\n    {\n      VALUE \"Translation\", 1033, 1252\n    }\n}\n");
+1 VERSIONINFO\n    FILEVERSION     1,13,4,0\n    PRODUCTVERSION  1,13,4,0\n    FILEOS          0x00000004L\n    FILETYPE        0x00000001L\n{\n    BLOCK \"StringFileInfo\"\n    {\n        BLOCK \"040904E4\"\n        {\n            VALUE \"CompanyName\", \"\\000\"\n            VALUE \"FileDescription\", \"OCamlEditor\\000\"\n            VALUE \"FileVersion\", \"1.13.4.0\\000\"\n            VALUE \"InternalName\", \"ocamleditorw.exe\\000\"\n            VALUE \"ProductName\", \"OCamlEditor\\000\"\n            VALUE \"LegalCopyright\", \"\\251 2016 Francesco Tovagliari\\000\"\n        }\n    }\n    BLOCK \"VarFileInfo\"\n    {\n      VALUE \"Translation\", 1033, 1252\n    }\n}\n");
 
   "ocamleditor-msvc", (".\\ocamleditor.opt.resource.rc", "\
 1 VERSIONINFO\n    FILEVERSION     1,13,3,0\n    PRODUCTVERSION  1,13,3,0\n    FILEOS          0x00000004L\n    FILETYPE        0x00000001L\n{\n    BLOCK \"StringFileInfo\"\n    {\n        BLOCK \"040904E4\"\n        {\n            VALUE \"CompanyName\", \"\\000\"\n            VALUE \"FileDescription\", \"OCamlEditor\\000\"\n            VALUE \"FileVersion\", \"1.13.3.0\\000\"\n            VALUE \"InternalName\", \"ocamleditor.opt.exe\\000\"\n            VALUE \"ProductName\", \"OCamlEditor\\000\"\n            VALUE \"LegalCopyright\", \"\\251 2016 Francesco Tovagliari\\000\"\n        }\n    }\n    BLOCK \"VarFileInfo\"\n    {\n      VALUE \"Translation\", 1033, 1252\n    }\n}\n");
@@ -39,7 +45,7 @@ let _ =
   if exit_code <> 0 then failwith "Cannot find 'rc' command.";
   let exit_code = Sys.command "where cvtres 1>NUL" in
   if exit_code <> 0 then failwith "Cannot find 'cvtres' command.";
-  let rcname, rc = List.assoc Sys.argv.(1) resources in
+  let rcname, rc = try List.assoc Sys.argv.(1) resources with Not_found -> (try List.assoc (unquote Sys.argv.(1)) resources with Not_found -> kprintf failwith "rc_compile.ml: resource name %s not found") in
   let outchan = open_out_bin rcname in
   output_string outchan rc;
   close_out_noerr outchan;

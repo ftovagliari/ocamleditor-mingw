@@ -585,7 +585,7 @@
         <company></company>
         <product>OCamlEditor</product>
         <copyright>© 2016 Francesco Tovagliari</copyright>
-        <file_version>1.13.3.0</file_version>
+        <file_version>1.13.4.0</file_version>
         <icons/>
       </resource_file>
     </target>
