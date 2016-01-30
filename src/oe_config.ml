@@ -145,8 +145,6 @@ let find_command name =
 
 let oebuild_command = App_config.get_oebuild_command ()
 
-let oeproc_command = !Spawn.Parallel_process.oeproc_command
-
 let get_version ?(ok_status=0) command =
   try
     let redirect_stderr = if Sys.os_type = "Win32" then "1>NUL 2>NUL" else "1>/dev/null 2>/dev/null" in

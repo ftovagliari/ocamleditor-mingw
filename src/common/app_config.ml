@@ -101,7 +101,7 @@ let application_icons = get_application_dir "icons"
 
 let application_plugins = get_application_dir "plugins"
 
-let get_oeproc_command, get_oebuild_command =
+let get_oebuild_command =
   let find_best ?(param="--help") prog =
     let redirect_stderr = if Sys.os_type = "Win32" then " 2>NUL" else " 2>/dev/null" in
     try
@@ -125,19 +125,11 @@ let get_oeproc_command, get_oebuild_command =
     let path = (!! Sys.executable_name) // basename in
     if Sys.file_exists path && not (Sys.is_directory path) then path
     else
-      let path = (!! Sys.executable_name) // name // basename in
+      let path = (!! Sys.executable_name) // (if Filename.check_suffix name ".opt" then Filename.chop_extension name else name) // basename in
       if Sys.file_exists path then path
       else basename
   in
   begin fun () ->
-    if Sys.win32 then
-      let commands = [
-        find_command "oeproc.opt";
-        find_command "oeproc";
-      ] in
-      find_best ~param:"" commands
-    else "unused"
-  end, begin fun () ->
     let commands = [
       find_command "oebuild.opt";
       find_command "oebuild";

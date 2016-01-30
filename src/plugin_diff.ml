@@ -239,15 +239,20 @@ module Diff = struct
       let filename2 = buffer#tmp_filename in
       buffer#save_buffer ?filename:None () |> ignore;
       let diff = Preferences.preferences#get.Preferences.pref_program_diff in
-      let cmd = diff ^ " --binary " ^ (Filename.quote buffer#orig_filename) ^ " " ^ (Filename.quote filename2) in
+      let args = [|
+        "--binary";
+        buffer#orig_filename;
+        filename2
+      |]
+      in
       page#set_changed_after_last_diff false;
       let diffs = ref [] in
       let process_in ic =
         try diffs := Odiff.from_channel ic
         with ex -> Printf.eprintf "File \"plugin_diff.ml\": %s\n%s\n%!" (Printexc.to_string ex) (Printexc.get_backtrace());
       in
-      Spawn.async cmd ~verbose:false
-        ~process_in
+      Spawn.async diff args
+        ~process_in (*~process_err:Spawn.redirect_to_stderr*)
         ~at_exit:begin fun _ ->
           Hashtbl.replace cache page#get_oid !diffs;
           match !diffs with [] -> () | diffs ->

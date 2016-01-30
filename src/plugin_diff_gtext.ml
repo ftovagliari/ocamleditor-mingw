@@ -31,9 +31,14 @@ open Printf
       with ex -> Printf.eprintf "File \"plugin_diff.ml\": %s\n%s\n%!" (Printexc.to_string ex) (Printexc.get_backtrace());
     in
     let diff = Preferences.preferences#get.Preferences.pref_program_diff in
-    let cmd = diff ^ " --binary " ^ (Filename.quote filename1) ^ " " ^ (Filename.quote filename2) in
-    Printf.printf "%s\n%!" cmd;
-    Spawn.async cmd ~verbose:false
+    let args =
+      [|
+        "--binary";
+        filename1;
+        filename2
+      |]
+    in
+    Spawn.async diff args
       ~process_in
       ~at_exit:begin fun _ ->
         let tag_del = buffer#create_tag ~name:"tag_diff_del" [] in

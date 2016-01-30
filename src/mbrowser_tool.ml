@@ -884,7 +884,7 @@ object (self)
     if odoc <> [] then begin
       let f () =
         List.iter (fun result ->
-          Oe_doc.Printer.insert ~buffer ~kind:symbol.Oe.sy_kind result) odoc;
+            Oe_doc.Printer.insert ~buffer ~kind:symbol.Oe.sy_kind result) odoc;
       in
       odoc_buffer#block_signal_handlers ();
       Gaux.may odoc_view#signal_expose ~f:odoc_view#misc#handler_block;
