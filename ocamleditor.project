@@ -213,7 +213,7 @@
       <restrictions></restrictions>
       <dependencies>14,19,16,26,22</dependencies>
     </target>
-    <target name="ocamleditor-bytecode" default="true" id="0" sub_targets="" is_fl_package="false" subsystem="Console" readonly="false" visible="true" node_collapsed="false">
+    <target name="ocamleditor-bytecode" default="false" id="0" sub_targets="" is_fl_package="false" subsystem="Console" readonly="false" visible="true" node_collapsed="false">
       <descr></descr>
       <byt>true</byt>
       <opt>false</opt>
@@ -287,7 +287,7 @@
         <icons/>
       </resource_file>
     </target>
-    <target name="ocamleditor-native" default="false" id="11" sub_targets="" is_fl_package="false" subsystem="" readonly="false" visible="true" node_collapsed="false">
+    <target name="ocamleditor-native" default="true" id="11" sub_targets="" is_fl_package="false" subsystem="" readonly="false" visible="true" node_collapsed="false">
       <descr></descr>
       <byt>false</byt>
       <opt>true</opt>
@@ -526,7 +526,7 @@
       <restrictions></restrictions>
       <dependencies></dependencies>
     </target>
-    <target name="launcher" default="false" id="22" sub_targets="" is_fl_package="false" subsystem="Windows" readonly="false" visible="true" node_collapsed="true">
+    <target name="launcher" default="false" id="22" sub_targets="" is_fl_package="false" subsystem="Windows" readonly="false" visible="true" node_collapsed="false">
       <descr>Utility to open OCaml files from the file manager</descr>
       <byt>false</byt>
       <opt>true</opt>
@@ -779,7 +779,7 @@
     </target>
   </targets>
   <executables>
-    <executable name="ocamleditor-bytecode" default="true" target_id="0" id="0">
+    <executable name="ocamleditor-bytecode" default="false" target_id="0" id="0">
       <build_task>&lt;COMPILE&gt;</build_task>
       <env replace="false">
         <var enabled="true">OCAMLEDITORPARAM=debug=2,record_backtrace=1</var>
@@ -787,7 +787,7 @@
       </env>
       <args/>
     </executable>
-    <executable name="ocamleditor-native" default="false" target_id="11" id="1">
+    <executable name="ocamleditor-native" default="true" target_id="11" id="1">
       <build_task>&lt;COMPILE&gt;</build_task>
       <env replace="false">
         <var enabled="false">Path=D:\curl-7.29.0;C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\IDE;C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\BIN;C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Tools;C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Tools\bin;C:\Windows\Microsoft.NET\Framework\;C:\Windows\Microsoft.NET\Framework\\Microsoft .NET Framework 3.5 (Pre-Release Version);C:\Windows\Microsoft.NET\Framework\v2.0.50727;C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\VCPackages;C:\Program Files\Microsoft SDKs\Windows\v7.0\bin;C:\Windows;C:\Windows\system32;C:\Windows\system32\Wbem;C:\Program Files (x86)\Haskell\bin;C:\Program Files (x86)\Haskell Platform\2012.4.0.0\lib\extralibs\bin;C:\Program Files (x86)\Haskell Platform\2012.4.0.0\bin;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\IDE;C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\BIN;C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Tools;C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Tools\bin;C:\Windows\Microsoft.NET\Framework\;C:\Windows\Microsoft.NET\Framework\\Microsoft .NET Framework 3.5 (Pre-Release Version);C:\Windows\Microsoft.NET\Framework\v2.0.50727;C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\VCPackages;C:\Program Files\Microsoft SDKs\Windows\v7.0\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\flexdll;C:\Program Files (x86)\oasis\bin;C:\Tcl\bin;C:\GTK\bin;C:\pcre\bin;C:\ocaml\bin;C:\Program Files (x86)\UnxUtils\usr\local\wbin;D:\Borland\JBuilder2006\jdk1.5\bin;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files\TortoiseSVN\bin;C:\Program Files (x86)\Haskell Platform\2012.4.0.0\mingw\bin;C:\Program Files (x86)\Graphviz 2.28\bin;C:\Users\f.tovagliari\AppData\Roaming\cabal\bin;C:\Program Files (x86)\IDM Computer Solutions\UltraEdit\;C:\Program Files\jEdit;C:\Program Files (x86)\PuTTY;C:\Program Files (x86)\Bitvise SSH Client;C:\Users\f.tovagliari\AppData\Roaming\cabal\bin;C:\Program Files (x86)\IDM Computer Solutions\UltraEdit\</var>

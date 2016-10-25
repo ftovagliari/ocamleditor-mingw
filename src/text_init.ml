@@ -74,39 +74,42 @@ let key_press view =
 (** realize *)
 let realize view =
   let self = view in
-  ignore (self#misc#connect#after#realize ~callback:begin fun () ->
-    (match self#gutter.Gutter.bg_color with
-      | `WHITE -> self#gutter.Gutter.bg_color <-
-          (match Oe_config.gutter_bg_color with
-            | `CALC x -> Color.set_value x (`COLOR (self#misc#style#base `NORMAL))
-            | `THEME -> `COLOR (self#misc#style#bg `PRELIGHT)
-            | (`NAME _) as color-> color)
-      | _ -> ());
-    (match self#gutter.Gutter.fg_color with
-      | `WHITE -> self#gutter.Gutter.fg_color <-
-          (match Oe_config.gutter_fg_color with
-            | `CALC x -> Color.set_value x (`COLOR (self#misc#style#base `NORMAL))
-            | `THEME -> (Color.set_value 0.98 (`COLOR (self#misc#style#dark `NORMAL)))
-            | (`NAME _) as color -> color)
-      | _ -> ());
-    (match self#gutter.Gutter.border_color with
-      | `WHITE -> self#gutter.Gutter.border_color <-
-          (match Oe_config.gutter_border_color with
-            | `CALC x -> Color.set_value x (`COLOR (self#misc#style#base `NORMAL))
-            | `THEME -> Color.set_value 0.95 (`COLOR (self#misc#style#bg `INSENSITIVE))
-            | (`NAME _) as color -> color)
-      | _ -> ());
-    (match self#gutter.Gutter.marker_color with
-      | `WHITE -> self#gutter.Gutter.marker_color <-
-        (match Oe_config.gutter_marker_color with
-            | `CALC x -> Color.set_value x (`COLOR (self#misc#style#base `NORMAL))
-            | `THEME -> `COLOR (self#misc#style#dark `NORMAL)
-            | (`NAME _) as color -> color)
-      | _ -> ());
-    (* Change the bg color of the gutter on screen *)
-    view#misc#modify_bg [`NORMAL, self#gutter.Gutter.bg_color];
-    self#set_realized true;
-  end);;
+  if not self#realized then begin
+    ignore (self#misc#connect#after#realize ~callback:begin fun () ->
+        (match self#gutter.Gutter.bg_color with
+          | `WHITE -> self#gutter.Gutter.bg_color <-
+              (match Oe_config.gutter_bg_color with
+                | `CALC x -> Color.set_value x (`COLOR (self#misc#style#base `NORMAL))
+                | `THEME -> `COLOR (self#misc#style#bg `PRELIGHT)
+                | (`NAME _) as color-> color)
+          | _ -> ());
+        (match self#gutter.Gutter.fg_color with
+          | `WHITE -> self#gutter.Gutter.fg_color <-
+              (match Oe_config.gutter_fg_color with
+                | `CALC x -> Color.set_value x (`COLOR (self#misc#style#base `NORMAL))
+                | `THEME -> (Color.set_value 0.98 (`COLOR (self#misc#style#dark `NORMAL)))
+                | (`NAME _) as color -> color)
+          | _ -> ());
+        (match self#gutter.Gutter.border_color with
+          | `WHITE -> self#gutter.Gutter.border_color <-
+              (match Oe_config.gutter_border_color with
+                | `CALC x -> Color.set_value x (`COLOR (self#misc#style#base `NORMAL))
+                | `THEME -> Color.set_value 0.95 (`COLOR (self#misc#style#bg `INSENSITIVE))
+                | (`NAME _) as color -> color)
+          | _ -> ());
+        (match self#gutter.Gutter.marker_color with
+          | `WHITE -> self#gutter.Gutter.marker_color <-
+              (match Oe_config.gutter_marker_color with
+                | `CALC x -> Color.set_value x (`COLOR (self#misc#style#base `NORMAL))
+                | `THEME -> `COLOR (self#misc#style#dark `NORMAL)
+                | (`NAME _) as color -> color)
+          | _ -> ());
+        (* Change the bg color of the gutter on screen *)
+        view#misc#modify_bg [`NORMAL, self#gutter.Gutter.bg_color];
+        self#set_realized true
+      end)
+  end 
+;;
 
 (** select_lines_from_gutter *)
 let select_lines_from_gutter view =

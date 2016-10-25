@@ -23,6 +23,7 @@ let create_process ?wd ?env program args =
         cwd := Some (Sys.getcwd());
         Sys.chdir x
   end;
+  let args = Array.of_list (List.filter (fun x -> String.trim x <> "") (Array.to_list args)) in
   (*Printf.printf "SPAWN:\n  %s\n  %s %s\n%!" (Sys.getcwd()) program (String.concat "|" (Array.to_list args));*)
   let args = Array.append [| program |] args in
   try

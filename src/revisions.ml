@@ -116,7 +116,7 @@ class widget ~page ?packing () =
   let label_message  = GMisc.label ~markup:(sprintf "<b>%s</b>" page#get_filename) ~xalign:0.0 ~yalign:0.5 ~xpad:8 ~packing:item_message#add () in
   let pane           = GPack.paned `HORIZONTAL ~packing:mbox#add () in
   (*  *)
-  let rend_text      = GTree.cell_renderer_text [`SCALE `SMALL] in
+  let rend_text      = GTree.cell_renderer_text [`SCALE `SMALL; `YPAD 0] in
   let vc_rev         = GTree.view_column ~title:"Revision" ~renderer:(rend_text, ["text", col_rev]) () in
   let vc_date        = GTree.view_column ~title:"Date" ~renderer:(rend_text, ["text", col_date]) () in
   let vc_comment     = GTree.view_column ~title:"Comment" ~renderer:(rend_text, ["text", col_comment]) () in

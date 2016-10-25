@@ -32,8 +32,12 @@ type tag_table_entry = {
 }
 
 let draw_focus_ribbon = false
+let use_triangles = false
 let fold_size = 11 (*10 *)
 let dx = 5 (*4*)
+let dx1 = dx - 1
+let dx12 = (dx - 1) / 2
+let dxdx12 = dx - dx12
 
 let split_length num =
   let rec f acc parts fact = function
@@ -68,6 +72,7 @@ object (self)
     ~name:(sprintf "tag_code_folding_focus_%f" (Unix.gettimeofday())) []
   val toggled = new toggled ()
   val mutable fold_line_color = `NAME "#000000"
+  val mutable light_marker_color = `NAME "#000000"
 
   method enabled = enabled
   method set_enabled x =
@@ -84,7 +89,8 @@ object (self)
     end;
 
   method fold_line_color = fold_line_color
-  method set_fold_line_color x = fold_line_color <- x
+  method set_fold_line_color x =
+    fold_line_color <- x
 
   method scan_folding_points () =
     if enabled then begin
@@ -270,6 +276,7 @@ object (self)
             ~width:(view#gutter.Gutter.fold_size - 1) ~height:h0 ~filled:true ();*)
           drawable#set_foreground view#gutter.Gutter.marker_color;
           drawable#set_line_attributes ~width:2 ~cap:`PROJECTING ~style:`SOLID ();
+          Gdk.GC.set_dashes drawable#gc ~offset:1 [1; 2];
 
           let folds = List.rev (List.fold_left begin fun acc ((_, l2, _) as ll, a, b, c) ->
             (match acc with
@@ -287,15 +294,42 @@ object (self)
             (* Markers *)
             let xm = xm - 1 in
             List.iter begin fun (unmatched, _, (is_collapsed, ym1, ym2, _(*h1*), _(*h2*))) ->
-              drawable#set_line_attributes ~width:(if unmatched then 1 else 2) ();
+              drawable#set_line_attributes ~width:(if unmatched || use_triangles then 1 else 2) ();
+              let xm = xm - 2 in
+              let ym1 = ym1 - if use_triangles then 1 else dx in
+              let ya = ym1 + 2*dx in
+              let square = if use_triangles then [] else [(xm - dx, ym1); (xm + dx, ym1); (xm + dx, ya); (xm - dx, ya)] in
               if is_collapsed then begin
-                let xm = xm - 2 in
-                let ym1 = ym1 + 1 in
-                drawable#polygon ~filled:true [(xm, ym1 - 5); (xm, ym1 + 5); (xm + 5, ym1)];
+                if use_triangles then begin
+                  drawable#polygon ~filled:true [(xm, ym1 - 5); (xm, ym1 + 5); (xm + 5, ym1)];
+                end else begin
+                  drawable#set_line_attributes ~width:1 ();
+                  drawable#set_foreground view#gutter.Gutter.marker_color;
+                  drawable#polygon ~filled:false square;
+                  drawable#segments [(xm, ym1 + dx12), (xm, ym1 + dx1*2); (xm - dxdx12, ym1 + dx), (xm + dxdx12, ym1 + dx)];
+                end;
               end else begin
-                let ym1 = ym1 - 2 in
-                if unmatched then (drawable#polygon ~filled:false [(xm - 4, ym1); (xm + dx - 1, ym1); (xm, ym1 + dx - 1)])
-                else (drawable#polygon ~filled:true [(xm - 4, ym1); (xm + dx, ym1); (xm, ym1 + dx)]);
+                if use_triangles then begin
+                  if unmatched then (drawable#polygon ~filled:false [(xm - 4, ym1); (xm + dx - 1, ym1); (xm, ym1 + dx - 1)])
+                  else (drawable#polygon ~filled:true [(xm - 4, ym1); (xm + dx, ym1); (xm, ym1 + dx)]);
+                end else begin
+                  drawable#set_line_attributes ~width:1 ();
+                  drawable#set_foreground view#gutter.Gutter.bg_color;
+                  if unmatched then begin
+                    (*drawable#set_line_attributes ~style:`ON_OFF_DASH ();*)
+                    drawable#set_foreground view#gutter.Gutter.bg_color;
+                    drawable#polygon ~filled:true square;
+                    drawable#set_foreground light_marker_color;
+                    drawable#polygon ~filled:false square;
+                    (*drawable#segments [(xm - dx, ya), (xm + dx, ym1)(*; (xm - dx, ym1), (xm + dx, ya)*)];*)
+                  end else begin
+                    drawable#set_line_attributes ~style:`SOLID ();
+                    drawable#polygon ~filled:true square;
+                    drawable#set_foreground view#gutter.Gutter.marker_color;
+                    drawable#polygon ~filled:false square;
+                  end;
+                  drawable#segments [(xm - dxdx12, ym1 + dx), (xm + dxdx12, ym1 + dx)];
+                end;
                 match ym2 with
                   | Some ym2 ->
                     let xm = xm - 2 in
@@ -592,6 +626,13 @@ object (self)
       if enabled then (self#highlight x y);
       false
     end);
+    view#misc#connect#after#realize ~callback:begin fun () ->
+      light_marker_color <-
+        (let r, g, b = Color.rgb_of_gdk (GDraw.color view#gutter.Gutter.marker_color) in
+         Color.hsv_of_name r g b
+           (fun h s v ->
+              `NAME (Color.name_of_hsv h s (v +. 0.35))));
+    end |> ignore;
 
   initializer self#init()
 
