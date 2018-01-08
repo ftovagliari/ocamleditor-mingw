@@ -31,9 +31,10 @@ open Printf
 let is_mingw = List.exists ((=) "system: mingw") (get_command_output "ocamlc -config")
 
 let compile () =
+  let filename = if Sys.win32 then "terminate_process" else "terminate_process_unix" in
+  sys_command ["ocamlc"; filename ^ ".c" ];
   let ext = if Sys.win32 && not is_mingw then "obj" else "o" in
-  sys_command ["ocamlc"; "terminate_process.c"];
-  sys_command ["ocamlmklib"; (sprintf "terminate_process.%s" ext); "process_termination.ml"; "-o process_termination"];
+  sys_command ["ocamlmklib"; (sprintf "%s.%s" filename ext); "process_termination.ml"; "-o process_termination"];
 ;;
 
 let _ = main ~default_target:compile ~options:[] ()
