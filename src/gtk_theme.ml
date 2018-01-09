@@ -89,7 +89,7 @@ let set_theme ?theme ~context () =
         xthickness = 0
         ythickness = 0
       }", "widget \"*.smallbutton\" style \"small-button\"
-style \"oe-tooltips\"
+style \"oe-tooltip\"
 {
   bg[NORMAL] = \"#FFE375\"
   fg[NORMAL] = \"#000000\"
@@ -98,7 +98,7 @@ widget \"*.menubar_button\" style \"menubar-button\"
 widget \"*.windowbutton\" style \"window-button\"
 widget \"*.menubar_button_arrow\" style \"menubar-button-arrow\"
 widget \"*.oe_menubar\" style:highest \"oe_menubar\"
-widget \"gtk-tooltip*\" style \"oe-tooltips\"
+widget \"gtk-tooltip\" style \"oe-tooltip\"
 "
   in
   let style_targetlist, apply_targetlist =
@@ -126,7 +126,7 @@ widget \"gtk-tooltip*\" style \"oe-tooltips\"
       | "" ->
         begin
           try
-            let family, size = List.find (fun (n, _) -> Gtk_util.try_font context n) ["Sans", 9] in  
+            let family, size = List.find (fun (n, _) -> Gtk_util.try_font context n) ["Sans", 9] in
             let font_name = sprintf "%s %d" family size in
             pref.Preferences.pref_general_font <- font_name;
             Preferences.save();

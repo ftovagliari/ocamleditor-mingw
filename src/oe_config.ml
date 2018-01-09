@@ -27,7 +27,7 @@ open Printf
 (** Configuration Section =================================================== *)
 
 let dot_viewer : [`DEFAULT | `PDF]       = `DEFAULT
-let dot_attributes                      = " -Glabelloc=t -Gfontsize=26pt -Gfontname=\"Helvetica\" -Nfontsize=16pt -Nfontname=\"Helvetica\""
+let dot_attributes                       = " -Glabelloc=t -Gfontsize=26pt -Gfontname=\"Helvetica\" -Nfontsize=16pt -Nfontname=\"Helvetica\""
 let ocp_indent_tab_key_enabled           = true
 let autosave_enabled                     = true
 let autosave_interval                    = 5_000 (* milliseconds *)
@@ -63,7 +63,7 @@ let gutter_fg_color                      = (*`THEME*) `CALC 0.50 (*`NAME "#6070f
 let gutter_border_color                  = (*`THEME*) (*`CALC 0.875*) `CALC 0.97
 let gutter_marker_color                  = (*`THEME*) `CALC 0.40
 let code_folding_scope_color             = `NAME "#e5e5e5" (* disabled *)
-let code_folding_highlight_color         = "#eef5f5"
+let code_folding_highlight_color         = "#d0d0d0"
 let code_folding_hightlight_gradient     = ["#f4f4f4"; "#f9f9f9"; "#fefefe"] (* [] for no gradient *)
 let code_folding_font                    = ref (Some "-*-*-medium-r-*-sans-10-*-*-*-*-*-*-*")
                                           (* Font for the "n lines" label in the fold line; it must be 10 pixels height. None for no label *)

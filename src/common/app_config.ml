@@ -76,9 +76,11 @@ let user_home =
 
 let ocamleditor_user_home =
   let dirname =
-    if Ocaml_config.is_mingw then ".ocamleditor.mingw"
-    else if application_debug then ".ocamleditor.test"
-    else ".ocamleditor"
+    match Ocaml_config.is_mingw with
+      | true when application_debug -> ".ocamleditor.mingw"
+      | true -> ".ocamleditor.test.mingw"
+      | false when application_debug -> ".ocamleditor.test"
+      | false -> ".ocamleditor"
   in
   let ocamleditor_user_home = user_home // dirname in
   if not (Sys.file_exists ocamleditor_user_home) then (Unix.mkdir ocamleditor_user_home 509);
